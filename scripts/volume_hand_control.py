@@ -25,6 +25,7 @@ min_vol = vol_range[0]
 max_vol = vol_range[1]
 vol = 0
 vol_bar = 400
+vol_per = 0
 
 while True:
     success, frame = cap.read()
@@ -48,6 +49,7 @@ while True:
 
         vol = np.interp(length, [13, 200], [min_vol, max_vol])
         vol_bar = np.interp(length, [13, 200], [400, 150])
+        vol_per = np.interp(length, [13, 200], [0, 100])
         volume.SetMasterVolumeLevel(vol, None)
         print(int(length), vol)
 
@@ -56,6 +58,9 @@ while True:
 
     cv2.rectangle(frame, (50, 150), (85, 400), (0, 255, 0), 3)
     cv2.rectangle(frame, (50, int(vol_bar)), (85, 400), (0, 255, 0), cv2.FILLED)
+    cv2.putText(
+        frame, f"{int(vol_per)} %", (40, 450), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2
+    )
 
     c_time = time.time()
     fps = 1 / (c_time - p_time)
